@@ -6,22 +6,19 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import argparse
+import os
+
 import torch
+import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
-import torch.backends.cudnn as cudnn
-from torch.autograd import Variable
-
 import torchvision
 import torchvision.transforms as transforms
+from torch.autograd import Variable
 
-import os
-import argparse
-
-from .resnet import CIFAR10_ResNet18
-from .utils import progress_bar
-
+from src.ProbPrune.resnet import CIFAR10_ResNet18
+from src.ProbPrune.utils import progress_bar
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
