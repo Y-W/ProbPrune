@@ -104,5 +104,5 @@ ENV/
 /.idea/
 
 # Dev data
-/dataset/
+/datasets/
 /models/
