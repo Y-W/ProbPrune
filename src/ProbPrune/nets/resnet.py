@@ -188,6 +188,8 @@ class ResNet(nn.Module):
                                    batch_norm_avg_factor=batch_norm_avg_factor)
             self.num_prune.extend(stage.num_prune)
             stages.append(stage)
+            last_channels = target_channels
+            target_channels *= 2
         self.stages = nn.ModuleList(stages)
 
         self.final_bn = nn.BatchNorm2d(last_channels, momentum=batch_norm_avg_factor)
