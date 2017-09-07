@@ -129,7 +129,7 @@ class TrainVanilla(object):
             params = self.net.state_dict()
             sum_size = 0
             for k, v in params.iteritems():
-                total_s = 0
+                total_s = 1
                 for d in v.size():
                     total_s *= int(d)
                 print(k, v.mean(), total_s)
