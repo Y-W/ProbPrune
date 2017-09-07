@@ -41,6 +41,8 @@ class TrainVanilla(object):
         self.lr_init = self.config.getfloat('train', 'learning_rate')
         self.lr_steps = map(int, self.config.get('train',
                                                  'lr_step_epochs').split(','))
+        for i in xrange(len(self.lr_steps) - 1):
+            self.lr_steps[i+1] += self.lr_steps[i]
         self.train_epochs = self.config.getint('train', 'epochs')
         self.current_epoch = 0
 
