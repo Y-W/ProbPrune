@@ -121,7 +121,8 @@ class TrainVanilla(object):
                  100. * correct / total,
                  correct, total))
 
-        if self.current_epoch % self.save_interval == 0:
+        if self.current_epoch % self.save_interval == 0 \
+                or self.current_epoch == self.train_epochs:
             print('Saving model')
             params = self.net.state_dict()
             torch.save(params, os.path.join(self.output_dir,
