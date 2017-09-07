@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 import sys
 import os
 import configparser
+import datetime
 
 import torch
 import torch.nn as nn
@@ -53,7 +54,10 @@ class TrainVanilla(object):
             os.makedirs(self.output_dir)
 
     def train(self):
-        print('Train Epoch %d\n' % self.current_epoch)
+        print('Train Epoch %d | Time: %s'
+              % (self.current_epoch,
+                 'Timestamp: {:%Y-%m-%d %H:%M:%S}'.format(
+                     datetime.datetime.now())))
         lr = self.lr_init * (0.1 ** len([t for t in self.lr_steps
                                          if t <= self.current_epoch]))
         for param_group in self.optimizer.param_groups:
@@ -77,15 +81,25 @@ class TrainVanilla(object):
             train_loss += loss.data[0]
             _, predicted = outputs.data.max(dim=1)
             total += Y.size(0)
-            correct += predicted.eq(Y.data).sum().numpy()
+            correct += predicted.eq(Y.data).sum()
+
+            if batch_idx > 0:
+                print('\r', end='')
 
             print('%d/%d | Loss: %.3f | Acc: %.3f %% (%d/%d)'
-                  % (batch_idx, len(self.trainloader),
+                  % (batch_idx + 1, len(self.trainloader),
                      train_loss / (batch_idx + 1),
                      100. * correct / total,
-                     correct, total))
+                     correct, total),
+                  end='')
+        print()
 
     def test(self):
+        print('Test Epoch %d | Time: %s'
+              % (self.current_epoch,
+                 'Timestamp: {:%Y-%m-%d %H:%M:%S}'.format(
+                     datetime.datetime.now())))
+
         self.net.eval()
         test_loss = 0
         correct = 0
@@ -99,18 +113,17 @@ class TrainVanilla(object):
             test_loss += loss.data[0]
             _, predicted = torch.max(outputs.data, 1)
             total += targets.size(0)
-            correct += predicted.eq(targets.data).sum().numpy()
+            correct += predicted.eq(targets.data).sum()
 
-            print('%d/%d | Loss: %.3f | Acc: %.3f %% (%d/%d)'
-                  % (batch_idx, len(self.testloader),
-                     test_loss / (batch_idx + 1),
-                     100. * correct / total,
-                     correct, total))
+        print('%d/%d | Loss: %.3f | Acc: %.3f %% (%d/%d)'
+              % (len(self.testloader), len(self.testloader),
+                 test_loss / (batch_idx + 1),
+                 100. * correct / total,
+                 correct, total))
 
         if self.current_epoch % self.save_interval == 0:
             print('Saving model')
             params = self.net.state_dict()
-            print(params.keys())
             torch.save(params, os.path.join(self.output_dir,
                                             self.output_name))
 

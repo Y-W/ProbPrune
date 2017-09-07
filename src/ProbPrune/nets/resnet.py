@@ -198,6 +198,6 @@ class ResNet(nn.Module):
             prune_ptr += current_prunes
 
         out = out.mean(dim=3).mean(dim=2)
-        out = self.linear(out)
+        out = self.final(out)
 
         return out
