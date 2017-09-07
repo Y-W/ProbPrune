@@ -124,17 +124,9 @@ class TrainVanilla(object):
                  correct, total))
 
         if self.current_epoch % self.save_interval == 0 \
-                or self.current_epoch == self.train_epochs or True:
+                or self.current_epoch == self.train_epochs:
             print('Saving model')
             params = self.net.state_dict()
-            sum_size = 0
-            for k, v in params.iteritems():
-                total_s = 1
-                for d in v.size():
-                    total_s *= int(d)
-                print(k, v.mean(), v.size(), total_s)
-                sum_size += total_s
-            print(sum_size)
             torch.save(params, os.path.join(self.output_dir,
                                             self.output_name))
 
