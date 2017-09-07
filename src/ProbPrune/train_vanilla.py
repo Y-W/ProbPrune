@@ -132,7 +132,7 @@ class TrainVanilla(object):
                 total_s = 1
                 for d in v.size():
                     total_s *= int(d)
-                print(k, v.mean(), total_s)
+                print(k, v.mean(), v.size(), total_s)
                 sum_size += total_s
             print(sum_size)
             torch.save(params, os.path.join(self.output_dir,
